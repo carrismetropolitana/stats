@@ -23,7 +23,7 @@ void (async () => {
 
   await client.insert({
     table: tableName,
-    values: { test: 'hey' },
+    values: [{ test: 'hey' }],
     format: 'JSONCompactEachRow',
   });
 
