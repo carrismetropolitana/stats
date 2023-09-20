@@ -1,4 +1,4 @@
-import { createClient } from '@clickhouse/client';
+const { createClient } = require('@clickhouse/client');
 
 void (async () => {
   //

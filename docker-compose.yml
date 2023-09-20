@@ -79,8 +79,8 @@ services:
   # # # # # # # # # # # # # # # # # # # # #
   # # # # # # # # # # # # # # # # # # # # #
 
-  server:
-    image: ghcr.io/carrismetropolitana/feedback-collector
+  feedback-collector:
+    image: ghcr.io/carrismetropolitana/feedback-collector:production
     restart: unless-stopped
     logging:
       options:
