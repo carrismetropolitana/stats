@@ -13,13 +13,13 @@ void (async () => {
   //     query: `DROP TABLE IF EXISTS ${tableName}`,
   //   });
 
-  await client.command({
-    query: `
-      CREATE TABLE ${tableName} (id UInt64)
-      ENGINE MergeTree()
-      ORDER BY (id)
-    `,
-  });
+  //   await client.command({
+  //     query: `
+  //       CREATE TABLE ${tableName} (id UInt64)
+  //       ENGINE MergeTree()
+  //       ORDER BY (id)
+  //     `,
+  //   });
 
   await client.insert({
     table: tableName,
