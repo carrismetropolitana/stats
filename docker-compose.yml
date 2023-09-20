@@ -25,21 +25,6 @@ services:
   # # # # # # # # # # # # # # # # # # # # #
   # # # # # # # # # # # # # # # # # # # # #
 
-  promtail:
-    image: grafana/promtail
-    restart: unless-stopped
-    logging:
-      options:
-        max-size: '1m'
-        max-file: '1'
-    volumes:
-      - /var/lib/docker/containers:/var/lib/docker/containers
-      - ./promtail/docker-config.yml:/etc/promtail/docker-config.yml
-    command: -config.file=/etc/promtail/docker-config.yml
-
-  # # # # # # # # # # # # # # # # # # # # #
-  # # # # # # # # # # # # # # # # # # # # #
-
   nginx:
     image: nginx:stable
     restart: unless-stopped
