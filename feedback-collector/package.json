@@ -1,0 +1,12 @@
+{
+    "name": "@carrismetropolitana/feedback-collector",
+    "version": "2023.2.1",
+    "private": true,
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "dependencies": {
+        "@clickhouse/client": "^0.2.2"
+    }
+}

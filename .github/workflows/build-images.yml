@@ -1,0 +1,40 @@
+name: Build & Publish Docker Images
+
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  #
+
+  # # # # # # # # # # # # # # # # # # # # #
+  # # # # # # # # # # # # # # # # # # # # #
+
+  feedback-collector:
+    name: 'Docker Build - feedback-collector'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Docker Image
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          context: ./feedback-collector
+          file: ./feedback-collector/Dockerfile
+          tags: ghcr.io/carrismetropolitana/feedback-collector:${{ github.ref_name }}

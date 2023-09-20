@@ -2,6 +2,7 @@ version: '3.9'
 
 volumes:
   certbotdata:
+  clickhousedata:
   lokidata:
   grafanadata:
 
@@ -48,6 +49,10 @@ services:
   certbot:
     image: certbot/certbot
     restart: unless-stopped
+    logging:
+      options:
+        max-size: '1m'
+        max-file: '1'
     volumes:
       - ./letsencrypt:/etc/letsencrypt
       - certbotdata:/var/www/certbot
@@ -56,12 +61,34 @@ services:
   # # # # # # # # # # # # # # # # # # # # #
   # # # # # # # # # # # # # # # # # # # # #
 
+  clickhouse:
+    image: clickhouse/clickhouse-server
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: '1m'
+        max-file: '1'
+    volumes:
+      - clickhousedata:/var/lib/clickhouse/
+      - ./clickhouse/config.xml:/etc/clickhouse-server/config.d/config.xml
+      # - ${PWD}/fs/volumes/clickhouse/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml
+    # ports:
+    #   - '127.0.0.1:8123:8123'
+    #   - '127.0.0.1:9000:9000'
+
+  # # # # # # # # # # # # # # # # # # # # #
+  # # # # # # # # # # # # # # # # # # # # #
+
   loki:
     image: grafana/loki
     restart: always
+    logging:
+      options:
+        max-size: '1m'
+        max-file: '1'
     volumes:
       - lokidata:/data
-      - ./configs/loki.yml:/etc/loki/local-config.yml
+      - ./loki/config.yml:/etc/loki/local-config.yml
     command: -config.file=/etc/loki/local-config.yml
 
   # # # # # # # # # # # # # # # # # # # # #
@@ -70,9 +97,9 @@ services:
   grafana:
     image: grafana/grafana
     restart: unless-stopped
-    volumes:
-      - grafanadata:/var/lib/grafana
     logging:
       options:
         max-size: '1m'
         max-file: '1'
+    volumes:
+      - grafanadata:/var/lib/grafana
