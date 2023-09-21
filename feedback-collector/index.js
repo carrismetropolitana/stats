@@ -16,6 +16,14 @@ const tableName = 'feedback_stops_explorer_realtime';
 //
 // ROUTE
 
+fastify.route({
+  method: 'OPTIONS',
+  url: '/*',
+  handler: async (request, reply) => {
+    reply.code(204).header('Content-Length', '0').header('Access-Control-Allow-Origin', '*').header('Access-Control-Allow-Methods', 'POST').send();
+  },
+});
+
 fastify.post('/feedback/stopsExplorerRealtime', async (request, reply) => {
   await client.insert({
     table: tableName,
