@@ -114,3 +114,4 @@ services:
         max-file: '1'
     volumes:
       - grafanadata:/var/lib/grafana
+      - ./grafana:/etc/grafana/provisioning

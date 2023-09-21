@@ -1,0 +1,34 @@
+apiVersion: 1
+
+# # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # #
+
+apps:
+  - type: grafana-clickhouse-datasource
+
+# # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # #
+
+# # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # #
+
+datasources:
+  - name: ClickHouse2
+    type: grafana-clickhouse-datasource
+    jsonData:
+      defaultDatabase: default
+      port: 9000
+      server: clickhouse
+      username: default
+      tlsSkipVerify: false
+
+# # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # #
+
+providers:
+  - name: dashboards
+    type: file
+    updateIntervalSeconds: 30
+    options:
+      path: /etc/dashboards
+      foldersFromFilesStructure: true
