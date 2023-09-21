@@ -62,7 +62,7 @@ fastify.listen({ port: 5050, host: '0.0.0.0' }, async (err, address) => {
             details String DEFAULT ''
         )
         ENGINE MergeTree()
-        PRIMARY KEY (timestamp, vehicle_id, sentiment)
+        PRIMARY KEY (timestamp, sentiment)
         ORDER BY (timestamp, sentiment, trip_id, vehicle_id, details)
     `,
   });
