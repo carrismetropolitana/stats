@@ -43,7 +43,7 @@ fastify.listen({ port: 5050, host: '0.0.0.0' }, async (err, address) => {
   await client.command({
     query: `
         CREATE TABLE IF NOT EXISTS ${tableName} (
-            timestamp DateTime64(6, 'Europe/Lisbon'),
+            timestamp DateTime64(3, 'Europe/Lisbon'),
             stop_id FixedString(6),
             trip_id Nullable(String),
             vehicle_id Nullable(String),
