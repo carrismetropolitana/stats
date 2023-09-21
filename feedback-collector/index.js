@@ -26,7 +26,7 @@ fastify.post('/feedback/stopsExplorerRealtime', async (request, reply) => {
         trip_id: request.body.trip_id,
         vehicle_id: request.body.vehicle_id,
         sentiment: request.body.sentiment,
-        details: request.body.details,
+        details: JSON.stringify(request.body.details),
       },
     ],
     format: 'JSONEachRow',
@@ -48,7 +48,7 @@ fastify.listen({ port: 5050, host: '0.0.0.0' }, async (err, address) => {
             trip_id Nullable(String),
             vehicle_id Nullable(String),
             sentiment Enum('positive' = 1, 'negative' = 0),
-            details JSON
+            details String
         )
         ENGINE MergeTree()
         ORDER BY (timestamp)
