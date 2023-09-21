@@ -7,24 +7,20 @@ void (async () => {
     host: 'http://clickhouse:8123',
   });
 
-  const tableName = 'stops_explorer_realtime_feedback';
+  const tableName = 'stops_explorer_realtime_feedback2';
 
-  //   await client.command({
-  //     query: `DROP TABLE IF EXISTS ${tableName}`,
-  //   });
-
-  //   await client.command({
-  //     query: `
-  //       CREATE TABLE ${tableName} (id UInt64)
-  //       ENGINE MergeTree()
-  //       ORDER BY (id)
-  //     `,
-  //   });
+  await client.command({
+    query: `
+        CREATE TABLE IF NOT EXISTS ${tableName} (id UInt64, name String)
+        ENGINE MergeTree()
+        ORDER BY (id)
+      `,
+  });
 
   await client.insert({
     table: tableName,
-    values: [{ test: 'hey' }],
-    format: 'JSONCompactEachRow',
+    values: [{ id: 1, name: 'Ricardo' }],
+    format: 'JSONEachRow',
   });
 
   const rs = await client.query({
@@ -40,5 +36,5 @@ void (async () => {
     });
   }
 
-  await client.close();
+  //   await client.close();
 })();
