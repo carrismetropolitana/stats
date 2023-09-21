@@ -1,4 +1,4 @@
-const fastify = require('fastify')({ logger: true, requestTimeout: 20000 });
+const fastify = require('fastify')({ logger: true, requestTimeout: 20000, exposeHeadRoutes: true });
 const { createClient } = require('@clickhouse/client');
 
 //
