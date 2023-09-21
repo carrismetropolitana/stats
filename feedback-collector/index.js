@@ -1,4 +1,4 @@
-const fastify = require('fastify')({ logger: true, requestTimeout: 20000, exposeHeadRoutes: true });
+const fastify = require('fastify')({ logger: true, requestTimeout: 20000 });
 const { createClient } = require('@clickhouse/client');
 
 //
@@ -16,13 +16,13 @@ const tableName = 'feedback_stops_explorer_realtime';
 //
 // ROUTE
 
-// fastify.route({
-//   method: 'OPTIONS',
-//   url: '/*',
-//   handler: async (request, reply) => {
-//     reply.code(204).header('Content-Length', '0').header('Access-Control-Allow-Methods', 'POST').send();
-//   },
-// });
+fastify.route({
+  method: 'OPTIONS',
+  url: '/*',
+  handler: async (request, reply) => {
+    reply.code(204).header('Content-Length', '0').header('Access-Control-Allow-Methods', 'POST').send();
+  },
+});
 
 fastify.post('/feedback/stopsExplorerRealtime', async (request, reply) => {
   await client.insert({
