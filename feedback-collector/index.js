@@ -1,40 +1,57 @@
+const fastify = require('fastify')({ logger: true, requestTimeout: 20000 });
 const { createClient } = require('@clickhouse/client');
 
-void (async () => {
-  //
+//
+// SETUP CLIENT
 
-  const client = createClient({
-    host: 'http://clickhouse:8123',
-  });
+const client = createClient({
+  host: 'http://clickhouse:8123',
+});
 
-  const tableName = 'stops_explorer_realtime_feedback2';
+//
+// TABLE NAME
 
-  await client.command({
-    query: `
-        CREATE TABLE IF NOT EXISTS ${tableName} (id UInt64, name String)
-        ENGINE MergeTree()
-        ORDER BY (id)
-      `,
-  });
+const tableName = 'feedback_stops_explorer_realtime';
 
+//
+// ROUTE
+
+fastify.post('/feedback/stopsExplorerRealtime', async (request, reply) => {
   await client.insert({
     table: tableName,
-    values: [{ id: 1, name: 'Ricardo' }],
+    values: [
+      {
+        timestamp: Date.now(),
+        stop_id: request.body.stop_id,
+        trip_id: request.body.trip_id,
+        vehicle_id: request.body.vehicle_id,
+        sentiment: request.body.sentiment,
+        details: request.body.details,
+      },
+    ],
     format: 'JSONEachRow',
   });
+  return reply.send(200);
+});
 
-  const rs = await client.query({
-    query: `SELECT * from ${tableName}`,
-    format: 'JSONEachRow',
+//
+// START FASTIFY SERVER
+
+fastify.listen({ port: 5050, host: '0.0.0.0' }, async (err, address) => {
+  if (err) throw err;
+  console.log(`Server listening on ${address}`);
+  await client.command({
+    query: `
+        CREATE TABLE IF NOT EXISTS ${tableName} (
+            timestamp DateTime64(6, 'Europe/Lisbon'),
+            stop_id FixedString(6),
+            trip_id Nullable(String),
+            vehicle_id Nullable(String),
+            sentiment Enum('positive' = 1, 'negative' = 0),
+            details JSON
+        )
+        ENGINE MergeTree()
+        ORDER BY (timestamp)
+    `,
   });
-
-  for await (const rows of rs.stream()) {
-    // or just `rows.text()` / `rows.json()`
-    // to consume the entire response at once
-    rows.forEach((row) => {
-      console.log(row.json());
-    });
-  }
-
-  //   await client.close();
-})();
+});
