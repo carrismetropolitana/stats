@@ -54,8 +54,8 @@ services:
         max-size: '1m'
         max-file: '1'
     volumes:
-      - ./letsencrypt:/etc/letsencrypt
       - certbotdata:/var/www/certbot
+      - ./letsencrypt:/etc/letsencrypt
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
   # # # # # # # # # # # # # # # # # # # # #
