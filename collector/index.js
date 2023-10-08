@@ -22,8 +22,8 @@ fastify.route({
 //
 // SETUP ENDPOINTS
 
-fastify.post('/usage/website', usageEndpoint.website);
-fastify.post('/feedback/stopsExplorerRealtime', feedbackEndpoint.stopsExplorerRealtime);
+fastify.post('/collector/usage/website', usageEndpoint.website);
+fastify.post('/collector/feedback/stopsExplorerRealtime', feedbackEndpoint.stopsExplorerRealtime);
 
 //
 // START FASTIFY SERVER

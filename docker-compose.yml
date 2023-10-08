@@ -71,21 +71,6 @@ services:
     volumes:
       - clickhousedata:/var/lib/clickhouse/
       - ./clickhouse/config.xml:/etc/clickhouse-server/config.d/config.xml
-      # - ${PWD}/fs/volumes/clickhouse/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml
-    # ports:
-    #   - '127.0.0.1:8123:8123'
-    #   - '127.0.0.1:9000:9000'
-
-  # # # # # # # # # # # # # # # # # # # # #
-  # # # # # # # # # # # # # # # # # # # # #
-
-  feedback-collector:
-    image: ghcr.io/carrismetropolitana/feedback-collector:production
-    restart: unless-stopped
-    logging:
-      options:
-        max-size: '1m'
-        max-file: '1'
 
   # # # # # # # # # # # # # # # # # # # # #
   # # # # # # # # # # # # # # # # # # # # #
@@ -115,3 +100,14 @@ services:
     volumes:
       - grafanadata:/var/lib/grafana
       - ./grafana:/etc/grafana/provisioning
+
+  # # # # # # # # # # # # # # # # # # # # #
+  # # # # # # # # # # # # # # # # # # # # #
+
+  collector:
+    image: ghcr.io/carrismetropolitana/collector:production
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: '1m'
+        max-file: '1'

@@ -11,8 +11,8 @@ jobs:
   # # # # # # # # # # # # # # # # # # # # #
   # # # # # # # # # # # # # # # # # # # # #
 
-  feedback-collector:
-    name: 'Docker Build - feedback-collector'
+  collector:
+    name: 'Docker Build - collector'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -35,6 +35,6 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          context: ./feedback-collector
-          file: ./feedback-collector/Dockerfile
-          tags: ghcr.io/carrismetropolitana/feedback-collector:${{ github.ref_name }}
+          context: ./collector
+          file: ./collector/Dockerfile
+          tags: ghcr.io/carrismetropolitana/collector:${{ github.ref_name }}

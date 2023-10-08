@@ -1,5 +1,5 @@
 {
-    "name": "@carrismetropolitana/feedback-collector",
+    "name": "@carrismetropolitana/collector",
     "version": "2023.2.1",
     "private": true,
     "main": "index.js",
