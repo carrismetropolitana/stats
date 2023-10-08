@@ -5,11 +5,11 @@ const CLICKHOUSE = require('../services/CLICKHOUSE');
 module.exports.website = async (request, reply) => {
   //
   console.log({
-    app_version: pjson.version,
+    app_version: request.body.app_version,
     //
-    referer: document.referrer,
+    referer: request.body.referrer,
     //
-    fingerprint: await getCurrentBrowserFingerPrint(),
+    fingerprint: request.body.fingerprint,
     //
     ua: request.body.ua,
     ua_browser_name: request.body.ua_browser_name,
