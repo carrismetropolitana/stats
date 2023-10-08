@@ -4,6 +4,7 @@ const CLICKHOUSE = require('../services/CLICKHOUSE');
 //
 module.exports.website = async (request, reply) => {
   //
+  request.body = JSON.parse(request.body);
   console.log({
     app_version: request.body.app_version,
     //
