@@ -7,7 +7,7 @@
         "start": "node index.js"
     },
     "dependencies": {
-        "@clickhouse/client": "^0.2.2",
-        "fastify": "4.23.2"
+        "@clickhouse/client": "0.3.0",
+        "fastify": "4.26.2"
     }
 }

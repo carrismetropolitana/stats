@@ -24,6 +24,7 @@ fastify.route({
 
 fastify.post('/collector/usage/website', usageEndpoint.website);
 fastify.post('/collector/feedback/stopsRealtime', feedbackEndpoint.stopsExplorerRealtime);
+fastify.post('/collector/feedback/pipStatus', feedbackEndpoint.pipExplorerStatus);
 
 //
 // START FASTIFY SERVER

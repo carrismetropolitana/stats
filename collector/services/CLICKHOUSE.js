@@ -44,6 +44,7 @@ class CLICKHOUSE {
 
     //
     // 2. Setup feedback.stops_explorer.realtime table
+
     try {
       await this.client.command({
         query: `
@@ -62,6 +63,26 @@ class CLICKHOUSE {
       });
     } catch (err) {
       console.log(`⤷ ERROR: Failed to create feedback_stops_explorer_realtime table.`, err);
+    }
+
+    //
+    // 3. Setup feedback.pip_explorer.status table
+
+    try {
+      await this.client.command({
+        query: `
+            CREATE TABLE IF NOT EXISTS feedback_pip_explorer_status (
+                timestamp DateTime64(3, 'Europe/Lisbon') DEFAULT now(),
+                pip_id FixedString(3),
+                answer_code String DEFAULT ''
+            )
+            ENGINE MergeTree()
+            PRIMARY KEY (timestamp, pip_id)
+            ORDER BY (timestamp, answer_code)
+        `,
+      });
+    } catch (err) {
+      console.log(`⤷ ERROR: Failed to create feedback_pip_explorer_status table.`, err);
     }
 
     //
