@@ -77,8 +77,8 @@ class CLICKHOUSE {
                 answer_code String DEFAULT ''
             )
             ENGINE MergeTree()
-            PRIMARY KEY (timestamp, pip_id)
-            ORDER BY (timestamp, answer_code)
+            PRIMARY KEY (timestamp, answer_code)
+            ORDER BY (timestamp, answer_code, pip_id)
         `,
       });
     } catch (err) {
