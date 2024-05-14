@@ -12,7 +12,7 @@ class CLICKHOUSE {
 
   async setup() {
     //
-    // 1. Setup usage.website table
+    // 1.1. Setup usage.website table
     // try {
     //   await this.client.command({
     //     query: `
@@ -42,8 +42,34 @@ class CLICKHOUSE {
     //   console.log(`⤷ ERROR: Failed to create usage_website table.`, err);
     // }
 
+    // 1.2. Setup usage.navegante_app table
+    try {
+      await this.client.command({
+        query: `
+                CREATE TABLE IF NOT EXISTS usage_navegante_app (
+                    timestamp DateTime64(3, 'Europe/Lisbon') DEFAULT now(),
+                    ip_address String DEFAULT '',
+                    card_serial_number String DEFAULT '',
+                    card_type_id String DEFAULT '',
+                    card_profile_id String DEFAULT '',
+                    app_version String DEFAULT '',
+                    os_version String DEFAULT '',
+                    device_model String DEFAULT '',
+                    service_name String DEFAULT '',
+                    status_code String DEFAULT '',
+                    error_details String DEFAULT ''
+                )
+                ENGINE MergeTree()
+                PRIMARY KEY (timestamp, status_code)
+                ORDER BY (timestamp, status_code, app_version)
+            `,
+      });
+    } catch (err) {
+      console.log(`⤷ ERROR: Failed to create usage_navegante_app table.`, err);
+    }
+
     //
-    // 2. Setup feedback.stops_explorer.realtime table
+    // 2.1. Setup feedback.stops_explorer.realtime table
 
     try {
       await this.client.command({
@@ -66,7 +92,7 @@ class CLICKHOUSE {
     }
 
     //
-    // 3. Setup feedback.pip_explorer.status table
+    // 2.2. Setup feedback.pip_explorer.status table
 
     try {
       await this.client.command({

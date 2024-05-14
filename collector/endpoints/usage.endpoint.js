@@ -87,3 +87,31 @@ module.exports.website = async (request, reply) => {
 
   return reply.send(200);
 };
+
+/* * */
+
+module.exports.naveganteApp = async (request, reply) => {
+  await CLICKHOUSE.client.insert({
+    table: 'usage_navegante_app',
+    values: [
+      {
+        ip_address: request.ip,
+        card_serial_number: request.body.card_serial_number,
+        card_type_id: request.body.card_type_id,
+        card_profile_id: request.body.card_profile_id,
+        app_version: request.body.app_version,
+        os_version: request.body.os_version,
+        device_model: request.body.device_model,
+        service_name: request.body.service_name,
+        status_code: request.body.status_code,
+        error_details: request.body.error_details,
+      },
+    ],
+    format: 'JSONEachRow',
+    clickhouse_settings: {
+      async_insert: 1,
+      wait_for_async_insert: 1,
+    },
+  });
+  return reply.send(200);
+};
