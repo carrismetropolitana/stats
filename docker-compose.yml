@@ -98,6 +98,8 @@ services:
     volumes:
       - grafanadata:/var/lib/grafana
       - ./grafana:/etc/grafana/provisioning
+    environment:
+      - GF_SERVER_DOMAIN=stats.carrismetropolitana.pt
 
   # # # # # # # # # # # # # # # # # # # # #
   # # # # # # # # # # # # # # # # # # # # #
