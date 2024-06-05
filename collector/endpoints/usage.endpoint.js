@@ -91,6 +91,7 @@ module.exports.website = async (request, reply) => {
 /* * */
 
 module.exports.naveganteApp = async (request, reply) => {
+	console.log(request);
   await CLICKHOUSE.client.insert({
     table: 'usage_navegante_app',
     values: [
