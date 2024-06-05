@@ -91,15 +91,11 @@ module.exports.website = async (request, reply) => {
 /* * */
 
 module.exports.naveganteApp = async (request, reply) => {
-	console.log('----------------------------');
-	console.log('request.headers',request.headers);
-	console.log('request.headers[x-forwarded-for]',request.headers['x-forwarded-for']);
-	console.log('----------------------------');
   await CLICKHOUSE.client.insert({
     table: 'usage_navegante_app',
     values: [
       {
-        ip_address: request.ip,
+        ip_address: request.headers['x-forwarded-for'],
         card_serial_number: request.body.card_serial_number,
         card_type_id: request.body.card_type_id,
         card_profile_id: request.body.card_profile_id,
