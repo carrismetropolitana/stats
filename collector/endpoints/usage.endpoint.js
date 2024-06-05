@@ -91,7 +91,10 @@ module.exports.website = async (request, reply) => {
 /* * */
 
 module.exports.naveganteApp = async (request, reply) => {
-	console.log(request);
+	console.log('----------------------------');
+	console.log('request.headers',request.headers);
+	console.log('request.headers[X-Forwarded-For]',request.headers['X-Forwarded-For']);
+	console.log('----------------------------');
   await CLICKHOUSE.client.insert({
     table: 'usage_navegante_app',
     values: [
