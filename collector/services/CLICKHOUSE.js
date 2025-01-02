@@ -52,6 +52,7 @@ class CLICKHOUSE {
                     card_serial_number String DEFAULT '',
                     card_type_id String DEFAULT '',
                     card_profile_id String DEFAULT '',
+                    product_id String DEFAULT '',
                     app_version String DEFAULT '',
                     os_version String DEFAULT '',
                     device_model String DEFAULT '',
@@ -67,6 +68,18 @@ class CLICKHOUSE {
     } catch (err) {
       console.log(`⤷ ERROR: Failed to create usage_navegante_app table.`, err);
     }
+
+    //1.3. Add product_id column to usage.navegante_app table
+    try {
+          await this.client.command({
+            query: `
+                    ALTER TABLE usage_navegante_app
+                    ADD COLUMN IF NOT EXISTS product_id String DEFAULT '' AFTER card_profile_id;
+                `,
+          });
+        } catch (err) {
+          console.log(`⤷ ERROR: Failed to add column to usage_navegante_app table.`, err);
+        }
 
     //
     // 2.1. Setup feedback.stops_explorer.realtime table

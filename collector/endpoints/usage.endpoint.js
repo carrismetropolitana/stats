@@ -99,6 +99,7 @@ module.exports.naveganteApp = async (request, reply) => {
         card_serial_number: request.body.card_serial_number,
         card_type_id: request.body.card_type_id,
         card_profile_id: request.body.card_profile_id,
+        product_id: request.body.product_id,
         app_version: request.body.app_version,
         os_version: request.body.os_version,
         device_model: request.body.device_model,
