@@ -111,3 +111,15 @@ services:
       options:
         max-size: '1m'
         max-file: '1'
+
+  # # # # # # # # # # # # # # # # # # # # #
+  # # # # # # # # # # # # # # # # # # # # #
+
+  pcgidbtunnel:
+    # https://github.com/carrismetropolitana/api/blob/beta/sync-vehicles/services/PCGIDB.js
+    image: ghcr.io/carrismetropolitana/pcgidbtunnel:production
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: '1m'
+        max-file: '1'
