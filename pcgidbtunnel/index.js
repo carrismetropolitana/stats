@@ -1,7 +1,6 @@
 /* * */
 
 import { readFileSync } from 'fs';
-import { MongoClient } from 'mongodb';
 import { createTunnel } from 'tunnel-ssh';
 
 /* * */
@@ -19,10 +18,6 @@ class PCGIDB {
 		this.sshTunnelConnectionRetries = 0;
 		this.sshTunnelConnectionInstance = null;
 		//
-		this.mongoClientConnecting = false;
-		this.mongoClientConnectionRetries = 0;
-		this.mongoClientConnectionInstance = null;
-		//
 	}
 
 	/* * *
@@ -39,83 +34,16 @@ class PCGIDB {
 
 			await this.setupSshTunnel();
 
-			//
-			// If another connection request is already in progress, wait for it to complete
-
-			if (this.mongoClientConnecting) {
-				console.log('PCGIDB: Waiting for MongoDB Client connection...');
-				await this.waitForMongoClientConnection();
-				return;
-			}
-
-			//
-			// Setup the flag to prevent double connection
-
-			this.mongoClientConnecting = true;
-
-			//
-			// Setup MongoDB connection options
-
-			const mongoClientOptions = {
-				connectTimeoutMS: 5000,
-				directConnection: true,
-				maxPoolSize: 200,
-				minPoolSize: 2,
-				readPreference: 'secondaryPreferred',
-				serverSelectionTimeoutMS: 5000,
-			};
-
-			//
-			// Create the client instance
-
-			let mongoClientInstance;
-
-			//
-			// Check if there is already an active MongoDB Client connection
-
-			if (this.mongoClientConnectionInstance && this.mongoClientConnectionInstance.topology && this.mongoClientConnectionInstance.topology.isConnected()) {
-				mongoClientInstance = this.mongoClientConnectionInstance;
-			}
-			else if (global._mongoClientConnectionInstance && global._mongoClientConnectionInstance.topology && global._mongoClientConnectionInstance.topology.isConnected()) {
-				mongoClientInstance = global._mongoClientConnectionInstance;
-			}
-			else {
-				mongoClientInstance = await MongoClient.connect(process.env.PCGIDB_MONGODB_URI, mongoClientOptions);
-			}
-
-			//
-			// Setup databases
-
-			const coreManagementDatabase = mongoClientInstance.db('CoreManagement');
-
-			//
-			// Setup collections
-
-			this.VehicleEvents = coreManagementDatabase.collection('VehicleEvents');
-
-			//
-			// Save the instance in memory
-
-			if (process.env.NODE_ENV === 'development') global._mongoClientConnectionInstance = mongoClientInstance;
-			else this.mongoClientConnectionInstance = mongoClientInstance;
-
-			//
-			// Reset flags
-
-			this.mongoClientConnecting = false;
-			this.mongoClientConnectionRetries = 0;
-
-			//
 		}
 		catch (error) {
-			this.mongoClientConnectionRetries++;
-			if (this.mongoClientConnectionRetries < MAX_CONNECTION_RETRIES) {
+			this.TunnelSetupRetries++;
+			if (this.TunnelSetupRetries < MAX_CONNECTION_RETRIES) {
 				console.error(`PCGIDB: Error creating MongoDB Client instance ["${error.message}"]. Retrying (${this.sshTunnelConnectionRetries}/${MAX_CONNECTION_RETRIES})...`);
 				await this.reset();
 				await this.connect();
 			}
 			else {
-				console.error('PCGIDB: Error creating MongoDB Client instance:', error);
+				console.error('PCGIDB: Error Setting up Tunnel:', error);
 				await this.reset();
 			}
 		}
@@ -136,13 +64,6 @@ class PCGIDB {
 		this.sshTunnelConnecting = false;
 		this.sshTunnelConnectionInstance = null;
 		global._sshTunnelConnectionInstance = null;
-		// Close MongoDB connections
-		// await this.mongoClientConnectionInstance?.close();
-		// await global._mongoClientConnectionInstance?.close();
-		// Clear MongoDB flags
-		this.mongoClientConnecting = false;
-		this.mongoClientConnectionInstance = null;
-		global._mongoClientConnectionInstance = null;
 		//
 		console.log('PCGIDB: Reset all connections.');
 	}
@@ -249,22 +170,6 @@ class PCGIDB {
 		//
 	}
 
-	/* * *
-	 * WAIT FOR AUTHENTICATION
-	 * Implements a mechanism that waits until authentication is complete
-	 */
-
-	async waitForMongoClientConnection() {
-		return new Promise((resolve) => {
-			const interval = setInterval(() => {
-				if (!this.mongoClientConnecting) {
-					clearInterval(interval);
-					resolve();
-				}
-			}, 100);
-		});
-	}
-
 	async waitForSshTunnelConnection() {
 		return new Promise((resolve) => {
 			const interval = setInterval(() => {
@@ -281,4 +186,6 @@ class PCGIDB {
 
 /* * */
 
-export default new PCGIDB();
+let tunnel = new PCGIDB();
+
+await tunnel.connect();
