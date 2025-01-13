@@ -4,6 +4,10 @@ volumes:
   lokidata:
   grafanadata:
 
+secrets:
+  pcgidbkey:
+    file: ./PCGIDB.key
+
 services:
   #
 
