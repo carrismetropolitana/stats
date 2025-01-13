@@ -38,3 +38,34 @@ jobs:
           context: ./collector
           file: ./collector/Dockerfile
           tags: ghcr.io/carrismetropolitana/collector:${{ github.ref_name }}
+
+  # # # # # # # # # # # # # # # # # # # # #
+  # # # # # # # # # # # # # # # # # # # # #
+
+  pcgidbtunnel:
+    name: 'Docker Build - pcgidbtunnel'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Docker Image
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          context: ./pcgidbtunnel
+          file: ./pcgidbtunnel/Dockerfile
+          tags: ghcr.io/carrismetropolitana/pcgidbtunnel:${{ github.ref_name }}
