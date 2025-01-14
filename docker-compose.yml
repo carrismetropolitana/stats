@@ -6,7 +6,7 @@ volumes:
 
 secrets:
   pcgidbkey:
-    file: ./PCGIDB.key
+    file: ./dev-tml_rsa
 
 services:
   #
