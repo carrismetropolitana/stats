@@ -7,7 +7,7 @@ class CLICKHOUSE {
   //
 
   constructor() {
-    this.client = createClient({ host: 'http://clickhouse:8123' });
+    this.client = createClient({ host: 'http://clickhouse:8123', username: 'clickhouse', password: 'clickhouse' });
   }
 
   async setup() {

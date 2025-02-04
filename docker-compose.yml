@@ -73,6 +73,9 @@ services:
     volumes:
       - clickhousedata:/var/lib/clickhouse/
       - ./clickhouse/config.xml:/etc/clickhouse-server/config.d/config.xml
+    environment:
+      - CLICKHOUSE_USER=clickhouse
+      - CLICKHOUSE_PASSWORD=clickhouse
 
   # # # # # # # # # # # # # # # # # # # # #
   # # # # # # # # # # # # # # # # # # # # #
