@@ -125,6 +125,28 @@ class CLICKHOUSE {
     }
 
     //
+    // 2.3. Setup switch_cm table
+
+    try {
+      await this.client.command({
+        query: `
+            CREATE TABLE IF NOT EXISTS switch_cm (
+                timestamp DateTime64(3, 'Europe/Lisbon') DEFAULT now(),
+                app_version String DEFAULT '',
+                debug_mode Boolean DEFAULT 0,
+					 short_link_destination String DEFAULT '',
+					 short_link_id String DEFAULT ''
+            )
+            ENGINE MergeTree()
+            PRIMARY KEY (timestamp, short_link_id)
+            ORDER BY (timestamp, short_link_id, app_version, debug_mode, short_link_destination)
+        `,
+      });
+    } catch (err) {
+      console.log(`⤷ ERROR: Failed to create switch_cm table.`, err);
+    }
+
+    //
   }
 
   //

@@ -9,6 +9,7 @@ const CLICKHOUSE = require('./services/CLICKHOUSE');
 
 const usageEndpoint = require('./endpoints/usage.endpoint');
 const feedbackEndpoint = require('./endpoints/feedback.endpoint');
+const switchEndpoint = require('./endpoints/switch.endpoint');
 
 //
 // SETUP HTTP OPTIONS
@@ -26,6 +27,7 @@ fastify.post('/collector/usage/website', usageEndpoint.website);
 fastify.post('/collector/usage/navegante_app', usageEndpoint.naveganteApp);
 fastify.post('/collector/feedback/stopsRealtime', feedbackEndpoint.stopsExplorerRealtime);
 fastify.post('/collector/feedback/pipStatus', feedbackEndpoint.pipExplorerStatus);
+fastify.post('/collector/switch', switchEndpoint.switchCm);
 
 //
 // START FASTIFY SERVER
